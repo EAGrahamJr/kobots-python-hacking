@@ -30,11 +30,11 @@ def motor_motor(motor:StepperMotor):
     motor.onestep(direction=stepper.FORWARD, style=stepper.INTERLEAVE)
     motor.onestep(direction=stepper.FORWARD, style=stepper.INTERLEAVE)
     motor.onestep(direction=stepper.FORWARD, style=stepper.INTERLEAVE)
-    
+
     print("Release---------------------------------")
     motor.release()
 
-    
+
 def keep_swingin(motor, delay:float = 0.02):
     try:
         while True:
@@ -66,9 +66,9 @@ def keep_swingin(motor, delay:float = 0.02):
             # for i in range(2000):
             #     motor.onestep(direction=stepper.BACKWARD, style=stepper.MICROSTEP)
             #     time.sleep(delay)
-            
+
     except Exception:
-	    motor.release()	
+	    motor.release()
 
 crickit.seesaw.edbug = False
 # stepper_motor = crickit.drive_stepper_motor
@@ -84,7 +84,7 @@ crickit.seesaw.edbug = False
 # motor_motor(crickit.stepper_motor)
 
 # ratio 1:1.29
-for i in range(77):
+for i in range(258):
     crickit.stepper_motor.onestep(direction=stepper.FORWARD)
     time.sleep(.02)
 crickit.stepper_motor.release()
