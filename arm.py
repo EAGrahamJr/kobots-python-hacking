@@ -2,62 +2,52 @@ from adafruit_crickit import crickit
 from adafruit_motor import stepper
 from adafruit_motor.stepper import StepperMotor
 from time import sleep
+from edthings import MG90_RANGE
 
 _SHOULDER_UP = 180
-_SHOULDER_DOWN = 20
+_SHOULDER_DOWN = 120
 
-_ELBOW_STRAIGHT = 0
-_ELBOW_BENT = 90
+_ELBOW_UP = 0
+_ELBOW_DOWN = 180
 
-_GRIPPER_OPEN = 60
-_GRIPPER_CLOSE = 9
-_GRIPPER_CLOSE_MOSTLY = 15
+_GRIPPER_OPEN = 45
+_GRIPPER_CLOSE = 110
+_GRIPPER_CLOSE_MOSTLY = 90
 
 _WAIST_HOME = 0
 
-_DEFAULT_RATE = 0.02
-_WAIST_RATE = 0.01
-
+_DEFAULT_RATE = 0.04
 
 class Arm:
     def __init__(self) -> None:
-        # Shoulder servo, build 3
-        self._shoulder = crickit.servo_3
-        self._shoulder.set_pulse_width_range(500, 2400)
+        # Shoulder servo, build 4
+        self._shoulder = crickit.servo_1
+        MG90_RANGE.apply(self._shoulder)
         self._shoulder.angle = _SHOULDER_UP
-        # Gropper servo, build 3
-        self._gripper = crickit.servo_4
-        self._gripper.set_pulse_width_range(500, 2400)
+
+        # Gropper servo, build 4
+        self._gripper = crickit.servo_3
+        MG90_RANGE.apply(self._gripper)
         self._gripper.angle = _GRIPPER_CLOSE
+
         # elbow servo, build 3
         self._elbow = crickit.servo_2
-        self._elbow.set_pulse_width_range(500, 2400)
-        self._elbow.angle = _ELBOW_STRAIGHT
+        MG90_RANGE.apply(self._elbow)
+        self._elbow.angle = _ELBOW_DOWN
 
-        # Waist servo, build 3
-        self._waist = crickit.servo_1
-        self._waist.set_pulse_width_range(500, 2400)
-        self._waist.angle = _WAIST_HOME
-
-        self._base = crickit.stepper_motor
-        self._base_position = 0.0
+        # base (e.g. waist) as stepper, build 4
+        self._waist = crickit.stepper_motor
+        self._waist_position = 0.0
 
     def close(self):
         self.home()
 
     def home(self):
-        self._waist.angle = _WAIST_HOME
-        self.gripper = 9
-        self.shoulder_park()
-        self.elbow_park()
-
-    @property
-    def waist(self):
-        return self._waist.angle
-
-    @waist.setter
-    def waist(self, angle: float, rate: float = _DEFAULT_RATE):
-        self._move_servo(self._waist, angle, rate)
+        # self.gripper = 9
+        self.shoulder = _SHOULDER_UP
+        self.elbow = _ELBOW_DOWN
+        self.waist = _WAIST_HOME
+        self.grpper = _GRIPPER_CLOSE
 
     @property
     def shoulder(self):
@@ -104,34 +94,30 @@ class Arm:
 
         servo.angle = angle
 
-    def shoulder_park(self, rate=_DEFAULT_RATE):
-        self.shoulder(_SHOULDER_UP, rate=rate)
-
-    def elbow_park(self, rate=_DEFAULT_RATE):
-        self.elbow(_ELBOW_STRAIGHT, rate=rate)
-
     @property
-    def base(self):
-        return self._base_position
+    def waist(self):
+        return self._waist_position
 
-    @base.setter
-    def base(self, angle: float):
+    @waist.setter
+    def waist(self, angle: float, rate = _DEFAULT_RATE):
         """Move the base to a certain angle.
 
         Args:
             angle (float): where to move to
         """
-        delta = angle - self._base_position
-        steps = 258 * delta/360
+
+        # current gear ratio = 4.67
+        delta = angle - self._waist_position
+        steps = 200 * 4.67 * delta/360
         if steps < 0:
-            direction = stepper.FORWARD
-        else:
             direction = stepper.BACKWARD
+        else:
+            direction = stepper.FORWARD
         steps = abs(steps)
 
         for i in range(int(steps)):
-            self._base.onestep(direction=direction)
-            sleep(_WAIST_RATE)
-        self._base_position = angle
+            self._waist.onestep(direction=direction)
+            sleep(rate)
+        self._waist_position = angle
         # temporary to keep it from heating up too much
-        self._base.release()
+        self._waist.release()
