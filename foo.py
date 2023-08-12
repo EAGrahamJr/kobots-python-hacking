@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
-from armdefs import Arm, _STEPPER_STEPS
 from time import sleep
+from arm import Arm, _SHOULDER_UP
 
 # TODO use for calibration?
 import adafruit_vcnl4040
@@ -14,14 +14,14 @@ def full_move():
         arm.gripper(70)
         arm.shoulder(50)
         arm.gripper(20)
-        arm.shoulder_park()
+        arm.shoulder(_SHOULDER_UP)
         sleep(2)
         arm.waist(midpoint)
         sleep(2)
         arm.shoulder(50)
         arm.gripper(70)
         sleep(2)
-        arm.shoulder_park()
+        arm.shoulder(_SHOULDER_UP)
         arm.waist(0)
 
         # put it back
@@ -30,11 +30,11 @@ def full_move():
         arm.gripper(70)
         arm.shoulder(50, rate=fast)
         arm.gripper(angle=20)
-        arm.shoulder_park(fast)
+        arm.shoulder(_SHOULDER_UP, rate=fast)
         arm.waist(0, False, rate=fast)
         arm.shoulder(50, rate=fast)
         arm.gripper(70)
-        arm.shoulder_park(fast)
+        arm.shoulder(_SHOULDER_UP, rate=fast)
 
     except KeyboardInterrupt:
         pass

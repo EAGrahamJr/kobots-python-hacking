@@ -107,8 +107,11 @@ class Arm:
         """
 
         # current gear ratio = 4.67
+        gear_ratio = 4.67
+        steps_per_rev = 200
+
         delta = angle - self._waist_position
-        steps = 200 * 4.67 * delta/360
+        steps = steps_per_rev * gear_ratio * delta/360
         if steps < 0:
             direction = stepper.BACKWARD
         else:
