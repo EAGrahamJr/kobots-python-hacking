@@ -1,10 +1,5 @@
 #!/bin/env python3
 
-# SPDX-FileCopyrightText: 2018 Kattni Rembor for Adafruit Industries
-#
-# SPDX-License-Identifier: MIT
-
-"""CircuitPython Essentials Servo standard servo example"""
 import time
 import board
 #import pwmio
@@ -16,16 +11,27 @@ from adafruit_pca9685 import PCA9685
 i2c = board.I2C()
 pca = PCA9685(i2c)
 pca.frequency = 50
-pwm = pca.channels[0]
+pwm0 = pca.channels[0]
+pwm1 = pca.channels[1]
 
-# Create a servo object, my_servo.
-servo = servo.Servo(pwm)
-servo.set_pulse_width_range(500,2400)
+servo0 = servo.Servo(pwm0, actuation_range=180)
+servo0.set_pulse_width_range(500,2400)
 
-while True:
-    for angle in range(0, 180, 1):  # 0 - 180 degrees, 5 degrees at a time.
-        servo.angle = angle
-        time.sleep(0.05)
-    for angle in range(180, 0, -1): # 180 - 0 degrees, 5 degrees at a time.
-        servo.angle = angle
-        time.sleep(0.05)
+servo1 = servo.Servo(pwm1, actuation_range=180)
+servo1.set_pulse_width_range(500,2400)
+
+try:
+    while True:
+        for angle in range(0, 180, 1):  # 0 - 180 degrees, 5 degrees at a time.
+            servo0.angle = angle
+            if angle % 15 == 0:
+                servo1.angle = angle
+            time.sleep(1)
+        for angle in range(180, 0, -1): # 180 - 0 degrees, 5 degrees at a time.
+            servo0.angle = angle
+            if angle % 15 == 0:
+                servo1.angle = angle
+            time.sleep(1)
+except:
+    servo0.angle = 0
+    servo1.angle = 0
