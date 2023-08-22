@@ -1,5 +1,12 @@
 #!/bin/env python3
 
+"""
+A "test" to determine if the SG90 is different than the MG90 or
+is it the controllers.
+
+FYI, it's the servos.
+"""
+
 from time import sleep
 import board
 from adafruit_motor import servo
@@ -58,9 +65,12 @@ myServo.angle = 90 # just to "put" it somewhere
 # run_angles()
 
 print("Using SG90 500-2400")
-myServo.set_pulse_width_range(500,2400)
-run_angles()
+# myServo.set_pulse_width_range(500,2400)
+# run_angles()
 
 print("Using extended 500-2500")
 myServo.set_pulse_width_range(500,2500)
-run_angles()
+# run_angles()
+
+# reset for Servomatic "home"
+myServo.angle = 0
