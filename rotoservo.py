@@ -13,7 +13,7 @@ from adafruit_motor import servo
 
 i2c = board.I2C()
 
-def move_servo(servo, angle: float, rate: float = 0.015):
+def move_servo(servo, angle: float, rate: float = 0.025):
         """Move a servo to a certain angle.
 
         Args:
@@ -59,7 +59,7 @@ def run_angles(servo):
             sleep(2)
 
 # sv = crickit_servo()
-sv = hat_servo(0)
+sv = hat_servo(1)
 # sv = gpio_servo()
 # sv.angle = 0 # just to "put" it somewhere
 
@@ -67,12 +67,12 @@ sv = hat_servo(0)
 # run_angles()
 
 # print("Using SG90 500-2400")
-# sv.set_pulse_width_range(500,2400)
+sv.set_pulse_width_range(500,2400)
 # run_angles()
 
 print("Using extended 500-2500")
-sv.set_pulse_width_range(500,2500)
-run_angles(sv)
+# sv.set_pulse_width_range(500,2500)
+# run_angles(sv)
 
 # reset for Servomatic "home"
 # move_servo(sv, 90)

@@ -5,7 +5,7 @@ import busio
 import adafruit_vl6180x
 from time import sleep
 
-i2c = busio.I2C(board.SCL, board.SDA)
+i2c = board.I2C()
 sensor = adafruit_vl6180x.VL6180X(i2c)
 # sensor.stop_range_continuous()
 # print(sensor.range_history_enabled)
