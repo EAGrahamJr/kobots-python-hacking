@@ -1,19 +1,14 @@
-#!/bin/env python3
-
 """
-A "test" to determine if the SG90 is different than the MG90 or
-is it the controllers.
+Stuff for servos, including a "smooth move" just to keep things from going off the rails.
 
-FYI, it's the servos.
+Uset to be a physical test thingie.
 """
 
 from time import sleep
 import board
-from adafruit_motor import servo
+from adafruit_motor.servo import Servo
 
-i2c = board.I2C()
-
-def move_servo(servo, angle: float, rate: float = 0.025):
+def move_servo(servo:Servo, angle: float, rate: float = 0.025):
         """Move a servo to a certain angle.
 
         Args:
@@ -35,20 +30,26 @@ def move_servo(servo, angle: float, rate: float = 0.025):
 
         servo.angle = angle
 
-def gpio_servo():
+def gpio_servo(pin = board.D18):
     import pwmio
-    pwm = pwmio.PWMOut(board.D18, duty_cycle=2 ** 15, frequency=50)
-    return servo.Servo(pwm, actuation_range=180)
+    pwm = pwmio.PWMOut(pin, duty_cycle=2 ** 15, frequency=50)
+    return Servo(pwm, actuation_range=180)
 
 def hat_servo(channel:int = 0):
     from adafruit_pca9685 import PCA9685
-    pca = PCA9685(i2c)
+    pca = PCA9685(board.I2C())
     pca.frequency = 50
     pwm = pca.channels[channel]
-    return servo.Servo(pwm, actuation_range=180)
+    return Servo(pwm, actuation_range=180)
 
-def crickit_servo():
+def crickit_servo(index:int = 0):
     from adafruit_crickit import crickit
+    if index == 0:
+        return crickit.servo_1
+    if index == 1:
+        return crickit.servo_2
+    if index == 2:
+        return crickit.servo_3
     return crickit.servo_4
 
 def run_angles(servo):
@@ -58,21 +59,9 @@ def run_angles(servo):
             move_servo(servo, i)
             sleep(2)
 
-# sv = crickit_servo()
-sv = hat_servo(1)
-# sv = gpio_servo()
-# sv.angle = 0 # just to "put" it somewhere
+def sg90(servo:Servo):
+    servo.set_pulse_width_range(500,2400)
 
-# print("Using default 750-2250")
-# run_angles()
+def mg90s(servo:Servo):
+    servo.set_pulse_width_range(500,2500)
 
-# print("Using SG90 500-2400")
-sv.set_pulse_width_range(500,2400)
-# run_angles()
-
-print("Using extended 500-2500")
-# sv.set_pulse_width_range(500,2500)
-# run_angles(sv)
-
-# reset for Servomatic "home"
-# move_servo(sv, 90)
