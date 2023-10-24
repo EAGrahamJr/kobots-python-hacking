@@ -63,7 +63,7 @@ def run_example():
     # my_display.print_char('A',1)
     # my_display.decimal_on = True
     # my_display.colon_on = True
-    my_display.print("A")
+    my_display.print("YO!")
     my_display.update_display()
 
     # # Un comment these lines if you want to see all available characters
@@ -75,7 +75,7 @@ def run_example():
     #             my_display.update_display()
     #             time.sleep(1)
     #             my_display.clear()
-
+    input()
     my_display.clear()
 
 if __name__ == '__main__':
