@@ -61,7 +61,34 @@ def run_angles(servo):
 
 def sg90(servo:Servo):
     servo.set_pulse_width_range(500,2400)
+    return RotoServo(servo)
 
 def mg90s(servo:Servo):
     servo.set_pulse_width_range(500,2500)
+    return RotoServo(servo)
+
+class RotoServo:
+    """
+    Just wraps the move_servo in a class for easier dorking
+    """
+    def __init__(self, servo:Servo) -> None:
+        self._servo = servo
+        self._speed = 0.025
+        servo.angle = 0
+
+    @property
+    def speed(self):
+        return self._speed
+
+    @speed.setter
+    def speed(self, howFast:float=0.025):
+        self._speed = howFast
+
+    @property
+    def angle(self, degrees:int):
+        return self._servo.angle
+
+    @angle.setter
+    def angle(self, where:int):
+        move_servo(self._servo,where,self._speed)
 
