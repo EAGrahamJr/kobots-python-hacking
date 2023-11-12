@@ -42,13 +42,13 @@ def hat_servo(channel:int = 0):
     pwm = pca.channels[channel]
     return Servo(pwm, actuation_range=180)
 
-def crickit_servo(index:int = 0):
+def crickit_servo(index:int = 1):
     from adafruit_crickit import crickit
-    if index == 0:
-        return crickit.servo_1
     if index == 1:
-        return crickit.servo_2
+        return crickit.servo_1
     if index == 2:
+        return crickit.servo_2
+    if index == 3:
         return crickit.servo_3
     return crickit.servo_4
 
@@ -85,10 +85,10 @@ class RotoServo:
         self._speed = howFast
 
     @property
-    def angle(self, degrees:int):
+    def angle(self):
         return self._servo.angle
 
     @angle.setter
-    def angle(self, where:int):
-        move_servo(self._servo,where,self._speed)
+    def angle(self, degrees:int):
+        move_servo(self._servo,degrees,self._speed)
 
