@@ -64,7 +64,7 @@ def sg90(servo:Servo):
     return RotoServo(servo)
 
 def mg90s(servo:Servo):
-    servo.set_pulse_width_range(500,2500)
+    servo.set_pulse_width_range(400,2600)
     return RotoServo(servo)
 
 class RotoServo:
