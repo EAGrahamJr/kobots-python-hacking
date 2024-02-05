@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 import time
 from adafruit_crickit import crickit
@@ -7,84 +7,77 @@ from adafruit_motor.stepper import StepperMotor
 
 print("Stepper motor demo!")
 
-def motor_motor(motor:StepperMotor):
+def runIt(motor:StepperMotor, delay:float = 0.02, steps:int = 200):
     print("Forward---------------------------------")
-    motor.onestep(direction=stepper.FORWARD)
-    motor.onestep(direction=stepper.FORWARD)
-    motor.onestep(direction=stepper.FORWARD)
-
+    for i in range(steps):
+        motor.onestep(direction=stepper.FORWARD)
+        time.sleep(delay)
     print("Backward--------------------------------")
-    motor.onestep(direction=stepper.BACKWARD)
-    motor.onestep(direction=stepper.BACKWARD)
-    motor.onestep(direction=stepper.BACKWARD)
-    motor.onestep(direction=stepper.BACKWARD)
+    for i in range(steps):
+        motor.onestep(direction=stepper.BACKWARD)
+        time.sleep(delay)
 
     print("Double-step-----------------------------")
-    motor.onestep(direction=stepper.FORWARD, style=stepper.DOUBLE)
-    motor.onestep(direction=stepper.FORWARD, style=stepper.DOUBLE)
-    motor.onestep(direction=stepper.FORWARD, style=stepper.DOUBLE)
-    motor.onestep(direction=stepper.FORWARD, style=stepper.DOUBLE)
+    for i in range(steps):
+        motor.onestep(direction=stepper.FORWARD, style=stepper.DOUBLE)
+        time.sleep(delay)
+    for i in range(steps):
+        motor.onestep(direction=stepper.BACKWARD, style=stepper.DOUBLE)
+        time.sleep(delay)
 
     print("Interleave------------------------------")
-    motor.onestep(direction=stepper.FORWARD, style=stepper.INTERLEAVE)
-    motor.onestep(direction=stepper.FORWARD, style=stepper.INTERLEAVE)
-    motor.onestep(direction=stepper.FORWARD, style=stepper.INTERLEAVE)
-    motor.onestep(direction=stepper.FORWARD, style=stepper.INTERLEAVE)
+    for i in range(steps * 2):
+        motor.onestep(direction=stepper.FORWARD, style=stepper.INTERLEAVE)
+        time.sleep(delay)
+    for i in range(steps * 2):
+        motor.onestep(direction=stepper.BACKWARD, style=stepper.INTERLEAVE)
+        time.sleep(delay)
 
-    print("Release---------------------------------")
-    motor.release()
-
-
-def keep_swingin(motor, delay:float = 0.02):
-    try:
-        while True:
-            print("Single step")
-            for i in range(200):
-                motor.onestep(direction=stepper.FORWARD)
-                time.sleep(delay)
-            for i in range(200):
-                motor.onestep(direction=stepper.BACKWARD)
-                time.sleep(delay)
-            print("Double step")
-            for i in range(200):
-                motor.onestep(direction=stepper.FORWARD, style=stepper.DOUBLE)
-                time.sleep(delay)
-            for i in range(200):
-                motor.onestep(direction=stepper.BACKWARD, style=stepper.DOUBLE)
-                time.sleep(delay)
-            print("Interleave step")
-            for i in range(200):
-                motor.onestep(direction=stepper.FORWARD, style=stepper.INTERLEAVE)
-                time.sleep(delay)
-            for i in range(200):
-                motor.onestep(direction=stepper.BACKWARD, style=stepper.INTERLEAVE)
-                time.sleep(delay)
-            # print("Microstepping")
-            # for i in range(2000):
-            #     motor.onestep(direction=stepper.FORWARD, style=stepper.MICROSTEP)
-            #     time.sleep(delay)
-            # for i in range(2000):
-            #     motor.onestep(direction=stepper.BACKWARD, style=stepper.MICROSTEP)
-            #     time.sleep(delay)
-
-    except Exception:
-	    motor.release()
+    # print("Microstep-------------------------------")
+    # for i in range(steps * 10):
+    #     motor.onestep(direction=stepper.FORWARD, style=stepper.MICROSTEP)
+    #     time.sleep(delay)
+    # for i in range(steps * 10):
+    #     motor.onestep(direction=stepper.BACKWARD, style=stepper.MICROSTEP)
+    #     time.sleep(delay)
 
 crickit.seesaw.edbug = False
-# stepper_motor = crickit.drive_stepper_motor
-# for i in range(2048):
-#    stepper_motor.onestep(direction=stepper.FORWARD)
-#    time.sleep(delay)
-# stepper_motor.release()
 
-# keep_swingin(crickit.drive_stepper_motor)
-# keep_swingin(crickit.stepper_motor)
+# Unipolar stepper
+motor = crickit.drive_stepper_motor
+ONCE = 2048
+delay = .001
 
-# motor_motor(crickit.drive_stepper_motor)
-# motor_motor(crickit.stepper_motor)
+# Bipolar stepper
+# motor = crickit.stepper_motor
+# ONCE = 200
+#delay = .02
 
-# ratio 1:1.29
-for i in range(258):
-    crickit.stepper_motor.onestep(direction=stepper.FORWARD)
-    time.sleep(.02)
-crickit.stepper_motor.release()
+# try:
+#     # Demo/debug things
+#     # crickit.seesaw.edbug = True
+#     # runIt(motor, steps=4)
+
+#     # single rotation
+#     for i in range(50):
+#         motor.onestep(direction=stepper.FORWARD)
+#         time.sleep(delay)
+# except Exception:
+#     pass
+
+while(True):
+    num = int(input("Enter an integer: "))
+    if num == 0:
+        break
+
+    if num > 0:
+        dir = stepper.FORWARD
+    else:
+        dir = stepper.BACKWARD
+
+    for i in range(abs(num)):
+        motor.onestep(direction=dir)
+        time.sleep(delay)
+
+crickit.seesaw.edbug = False
+motor.release()
