@@ -11,6 +11,7 @@ import adafruit_displayio_sh1106
 
 # Create the I2C interface.
 i2c = busio.I2C(board.SCL, board.SDA)
+i2c.edbug = True
 display_bus = displayio.I2CDisplay(i2c, device_address=0x3C)
 
 WIDTH = 128
@@ -31,23 +32,23 @@ def og():
     print("Drawing background")
     splash.append(bg_sprite)
 
-    # Draw a smaller inner rectangle
-    inner_bitmap = displayio.Bitmap(WIDTH - BORDER * 2, HEIGHT - BORDER * 2, 1)
-    inner_palette = displayio.Palette(1)
-    inner_palette[0] = 0x000000  # Black
-    inner_sprite = displayio.TileGrid(
-        inner_bitmap, pixel_shader=inner_palette, x=BORDER, y=BORDER
-    )
-    print("Drawing inner")
-    splash.append(inner_sprite)
+    # # Draw a smaller inner rectangle
+    # inner_bitmap = displayio.Bitmap(WIDTH - BORDER * 2, HEIGHT - BORDER * 2, 1)
+    # inner_palette = displayio.Palette(1)
+    # inner_palette[0] = 0x000000  # Black
+    # inner_sprite = displayio.TileGrid(
+    #     inner_bitmap, pixel_shader=inner_palette, x=BORDER, y=BORDER
+    # )
+    # print("Drawing inner")
+    # splash.append(inner_sprite)
 
-    # Draw a label
-    text = "Hello World!"
-    text_area = label.Label(
-        terminalio.FONT, text=text, color=0xFFFFFF, x=28, y=HEIGHT // 2 - 1
-    )
-    print("Drawing text")
-    splash.append(text_area)
+    # # Draw a label
+    # text = "Hello World!"
+    # text_area = label.Label(
+    #     terminalio.FONT, text=text, color=0xFFFFFF, x=28, y=HEIGHT // 2 - 1
+    # )
+    # print("Drawing text")
+    # splash.append(text_area)
 
 def dots():
     from adafruit_display_shapes.circle import Circle
