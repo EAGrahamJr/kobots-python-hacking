@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 import time
 from rainbowio import colorwheel
@@ -58,6 +58,7 @@ try:
         print("rainbow")
         rainbow_cycle(0) # Increase the number to slow down the rainbo
 except:
-    pixels.fill((0,0,0))
-    pixels.show()
+    print("Done")
 
+pixels.fill((0,0,0))
+pixels.show()
