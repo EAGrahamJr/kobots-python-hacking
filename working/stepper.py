@@ -43,15 +43,26 @@ def runIt(motor:StepperMotor, delay:float = 0.02, steps:int = 200):
 
 crickit.seesaw.edbug = False
 
-# Unipolar stepper
-motor = crickit.drive_stepper_motor
-ONCE = 2048
-delay = .001
+motor = None
+delay = None
+ONCE = 1
 
+picked = int(input("Which stepper (1=drive, 2=stepper, 0=exit: "))
+
+if picked == 0:
+    exit
+# Unipolar stepper
+if picked == 1:
+    print("Picked drive")
+    motor = crickit.drive_stepper_motor
+    ONCE = 2048
+    delay = .001
 # Bipolar stepper
-# motor = crickit.stepper_motor
-# ONCE = 200
-#delay = .02
+if picked == 2:
+    print("Picked stepper")
+    motor = crickit.stepper_motor
+    ONCE = 200
+    delay = .02
 
 # try:
 #     # Demo/debug things
@@ -66,7 +77,7 @@ delay = .001
 #     pass
 
 while(True):
-    num = int(input("Enter an integer: "))
+    num = int(input("Enter an integer (0 exits): "))
     if num == 0:
         break
 
