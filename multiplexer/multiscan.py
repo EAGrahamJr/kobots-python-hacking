@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 # This example shows using TCA9548A to perform a simple scan for connected devices
 import board
