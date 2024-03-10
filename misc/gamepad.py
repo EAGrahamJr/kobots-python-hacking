@@ -1,9 +1,8 @@
-#!/bin/env python3
-
 import time
-import board
 from micropython import const
 from adafruit_seesaw.seesaw import Seesaw
+import adafruit_tca9548a
+from edlib import i2c_util
 
 BUTTON_X = const(6)
 BUTTON_Y = const(2)
@@ -20,13 +19,15 @@ button_mask = const(
     | (1 << BUTTON_START)
 )
 
-# i2c_bus = board.STEMMA_I2C()  # The built-in STEMMA QT connector on the microcontroller
-i2c_bus = board.I2C()  # Uses board.SCL and board.SDA. Use with breadboard.
+i2c = i2c_util.board_i2c()
+#i2c_used = i2c
+tca = adafruit_tca9548a.TCA9548A(i2c)
+i2c_used = tca[7]
 
 count = 0
 while (count < 100):
     try:
-        seesaw = Seesaw(i2c_bus, addr=0x50)
+        seesaw = Seesaw(i2c_used, addr=0x50)
         print(f"Took {count} tries")
         break
     except:

@@ -1,4 +1,5 @@
-# Commonly defined colors
+'''Commonly defined colors'''
+
 _WHITE = (255, 255, 255)
 
 _RED = (255,0,0)

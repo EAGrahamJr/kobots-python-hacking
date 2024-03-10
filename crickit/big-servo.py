@@ -1,17 +1,25 @@
 from adafruit_crickit import crickit
 from time import sleep
-from working.manybuttons import *
+from edlib import seesaw_util as su
 
 ss = crickit.seesaw
 
+BLUELED = crickit.SIGNAL7
+GREENLED = crickit.SIGNAL6
+YELLOWLED = crickit.SIGNAL5
+REDLED = crickit.SIGNAL4
+GREENBUTTON = crickit.SIGNAL3
+YELLOWBUTTON = crickit.SIGNAL2
+REDBUTTON = crickit.SIGNAL1
+
 # setup buttons and an LED
-redButton = Button(REDBUTTON, ss)
-yellowButton = Button(YELLOWBUTTON, ss)
-greenButton = Button(GREENBUTTON, ss)
-redLed = LED(REDLED, ss)
-greenLed = LED(GREENLED, ss)
-yellowLed = LED(YELLOWLED, ss)
-blueLed = LED(BLUELED, ss)
+redButton = su.Button(REDBUTTON, ss)
+yellowButton = su.Button(YELLOWBUTTON, ss)
+greenButton = su.Button(GREENBUTTON, ss)
+redLed = su.LED(REDLED, ss)
+greenLed = su.LED(GREENLED, ss)
+yellowLed = su.LED(YELLOWLED, ss)
+blueLed = su.LED(BLUELED, ss)
 
 servo = crickit.servo_4
 servo.set_pulse_width_range(500,2400)
@@ -22,7 +30,7 @@ while True:
     redValue = redButton.read()
     yellowValue = yellowButton.read()
     greenValue = greenButton.read()
-    
+
     print(f"Checking {redValue}, {yellowValue}, {greenValue}")
 
     # used to verify button presses
@@ -32,7 +40,7 @@ while True:
         yellowLed.value = yellowValue
     if greenLed.value != greenValue:
         greenLed.value = greenValue
-    
+
     if redValue:
         servo.angle = 0
         blueIsOn = True
@@ -43,7 +51,7 @@ while True:
             blueLed.value = False
             blueIsOn = False
         servo.angle = 90
-        
+
     if greenValue:
         if blueIsOn:
             blueIsOn = False

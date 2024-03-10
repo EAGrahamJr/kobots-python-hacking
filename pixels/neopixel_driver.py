@@ -4,7 +4,7 @@ import time
 import board
 from rainbowio import colorwheel
 from adafruit_seesaw import seesaw, neopixel
-from edstuff import _BLUE, _CYAN, _GREEN, _PURPLE, _RED, _YELLOW
+from edlib.i2c_util import _BLUE, _CYAN, _GREEN, _PURPLE, _RED, _YELLOW
 
 # This little gem was wiring together a WS2818 LED "ring"
 # with an Adafruit Neopixel "strip" and using the I2C breakout board

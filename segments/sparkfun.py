@@ -43,7 +43,7 @@
 
 from __future__ import print_function
 import qwiic_alphanumeric
-import time
+# import time
 import sys
 
 def run_example():
@@ -57,6 +57,9 @@ def run_example():
         return
 
     print("\nQwiic Alphanumeric ready!")
+
+    print("Changing address")
+    # my_display.set_i2c_address(0x6F)
 
     # my_display.set_brightness(12)
     # my_display.print("A")

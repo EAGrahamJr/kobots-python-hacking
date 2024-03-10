@@ -4,7 +4,7 @@
 from time import sleep
 import busio
 import displayio
-import terminalio
+# import terminalio
 import board
 from adafruit_display_text import label
 import adafruit_displayio_sh1106
