@@ -51,6 +51,9 @@ picked = int(input("Which stepper (1=drive, 2=stepper, 0=exit: "))
 
 if picked == 0:
     exit
+
+step_style = stepper.SINGLE
+
 # Unipolar stepper
 if picked == 1:
     print("Picked drive")
@@ -61,8 +64,9 @@ if picked == 1:
 if picked == 2:
     print("Picked stepper")
     motor = crickit.stepper_motor
-    ONCE = 200
-    delay = .02
+    ONCE = 400
+    delay = .001
+    step_style = stepper.INTERLEAVE
 
 # try:
 #     # Demo/debug things
@@ -87,7 +91,7 @@ while(True):
         dir = stepper.BACKWARD
 
     for i in range(abs(num)):
-        motor.onestep(direction=dir)
+        motor.onestep(direction=dir, style=step_style)
         time.sleep(delay)
 
 crickit.seesaw.edbug = False
