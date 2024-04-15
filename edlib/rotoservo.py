@@ -150,5 +150,6 @@ def mg90s(servo:Servo) -> RotoServo:
         RotoServo: speed-controlled, "stepping" servo
     """
     servo.set_pulse_width_range(400,2600)
+    servo.actuation_range = 200
     return RotoServo(servo)
 
