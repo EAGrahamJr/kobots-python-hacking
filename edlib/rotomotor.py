@@ -21,3 +21,5 @@ class RotoStepper:
         for i in range(1,steps):
             self.motor.onestep(direction=dir, style=self.style)
             sleep(self.delay)
+        self.motor.release()
+
