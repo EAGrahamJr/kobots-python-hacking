@@ -5,8 +5,26 @@ from time import sleep
 class RotoStepper:
     def __init__(self, motor:StepperMotor, delay:float=.001, step_size:int = stepper.SINGLE) -> None:
         self.motor = motor
-        self.delay = delay
+        self._speed = delay
         self.style = step_size
+
+    @property
+    def speed(self)->float:
+        """The amount of "time" to sleep between steps (defaults to .025)
+
+        Returns:
+            float: pause time
+        """
+        return self._speed
+
+    @speed.setter
+    def speed(self, howFast:float=0.025):
+        """Sets the "speed"
+
+        Args:
+            howFast (float, optional): the speed to use. Defaults to 0.025.
+        """
+        self._speed = howFast
 
     def forward(self,steps:int):
         self.__run(steps)
@@ -20,6 +38,6 @@ class RotoStepper:
     def __run(self,steps:int, dir:int = stepper.FORWARD):
         for i in range(1,steps):
             self.motor.onestep(direction=dir, style=self.style)
-            sleep(self.delay)
+            sleep(self._speed)
         self.motor.release()
 
