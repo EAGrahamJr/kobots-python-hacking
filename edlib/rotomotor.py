@@ -4,9 +4,9 @@ from time import sleep
 
 class RotoStepper:
     def __init__(self, motor:StepperMotor, delay:float=.001, step_size:int = stepper.SINGLE) -> None:
-        self.motor = motor
+        self._motor = motor
         self._speed = delay
-        self.style = step_size
+        self._style = step_size
 
     @property
     def speed(self)->float:
@@ -33,11 +33,11 @@ class RotoStepper:
         self.__run(steps, dir=stepper.BACKWARD)
 
     def release(self):
-        self.motor.release()
+        self._motor.release()
 
     def __run(self,steps:int, dir:int = stepper.FORWARD):
         for i in range(1,steps):
-            self.motor.onestep(direction=dir, style=self.style)
+            self._motor.onestep(direction=dir, style=self._style)
             sleep(self._speed)
-        self.motor.release()
+        self._motor.release()
 
