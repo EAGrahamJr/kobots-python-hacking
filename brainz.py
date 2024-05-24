@@ -3,6 +3,10 @@ from edlib import rotoservo as rs
 from edlib import rotomotor as rm
 from adafruit_crickit import crickit
 from adafruit_seesaw.neopixel import NeoPixel
+import board
+import adafruit_vcnl4040
+
+i2c = board.I2C()
 
 # servos
 s1 = rs.mg90s(rs.crickit(1))
@@ -25,6 +29,8 @@ strand = NeoPixel(crickit.seesaw, 20, 8)
 strand.fill(c.BLACK)
 # status = crickit.onboard_pixel
 #status = NeoPixel(crickit.seesaw, 27, 1)
+
+sensor = adafruit_vcnl4040.VCNL4040(i2c)
 
 def home():
     step1.release()
