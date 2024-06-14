@@ -5,16 +5,18 @@
 import time
 import board
 import digitalio
+from adafruit_motor.stepper import StepperMotor
+from adafruit_motor import stepper
 
-coil_A_1_pin = digitalio.DigitalInOut(board.D17)
-coil_A_2_pin = digitalio.DigitalInOut(board.D18)
-coil_B_1_pin = digitalio.DigitalInOut(board.D10)
-coil_B_2_pin = digitalio.DigitalInOut(board.D9)
+pinA1 = digitalio.DigitalInOut(board.D17)
+pinA2 = digitalio.DigitalInOut(board.D18)
+pinB1 = digitalio.DigitalInOut(board.D10)
+pinB2 = digitalio.DigitalInOut(board.D9)
 
-coil_A_1_pin.direction = digitalio.Direction.OUTPUT
-coil_A_2_pin.direction = digitalio.Direction.OUTPUT
-coil_B_1_pin.direction = digitalio.Direction.OUTPUT
-coil_B_2_pin.direction = digitalio.Direction.OUTPUT
+pinA1.direction = digitalio.Direction.OUTPUT
+pinA2.direction = digitalio.Direction.OUTPUT
+pinB1.direction = digitalio.Direction.OUTPUT
+pinB2.direction = digitalio.Direction.OUTPUT
 
 def forward(delay, steps):
     i = 0
@@ -51,18 +53,48 @@ def backwards(delay, steps):
         i += 1
 
 def setStep(w1, w2, w3, w4):
-    coil_A_1_pin.value = w1
-    coil_A_2_pin.value = w2
-    coil_B_1_pin.value = w3
-    coil_B_2_pin.value = w4
+    pinA1.value = w1
+    pinA2.value = w2
+    pinB1.value = w3
+    pinB2.value = w4
 
-while True:
+def oldschool():
     user_delay = input("Delay between steps (milliseconds, 0 exits)? ")
     if user_delay is None or user_delay == "" or user_delay == "0":
-        break
+        setStep(0,0,0,0)
+        return False
     user_steps = input("How many steps forward? ")
     forward(int(user_delay) / 1000.0, int(user_steps))
     user_steps = input("How many steps backwards? ")
     backwards(int(user_delay) / 1000.0, int(user_steps))
+    return True
 
-setStep(0,0,0,0)
+def newschool():
+    st = StepperMotor(pinA1,pinB1,pinA2,pinB2,microsteps=None)
+    user_delay = input("Delay between steps (milliseconds, 0 exits)? ")
+    if user_delay is None or user_delay == "" or user_delay == "0":
+        st.release()
+        return False
+    delay = float(user_delay) / 1000.0
+
+    steps = int(input("How many steps forward? "))
+    i = 0
+    while i in range(0, steps):
+        st.onestep(direction = stepper.FORWARD, style = stepper.INTERLEAVE)
+        time.sleep(delay)
+        i += 1
+
+    steps = int(input("How many steps backwards? "))
+    i = 0
+    while i in range(0, steps):
+        st.onestep(direction = stepper.BACKWARD, style = stepper.INTERLEAVE)
+        time.sleep(delay)
+        i += 1
+
+    return True
+
+b = True
+while b:
+    # b = oldschool()
+    b = newschool()
+
