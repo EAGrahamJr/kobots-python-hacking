@@ -8,10 +8,11 @@ s3 = rs.mg90s(rs.hat(2))
 s4 = rs.mg90s(rs.hat(3))
 s5 = rs.mg90s(rs.hat(4))
 
-rs1 = rm.digitalStepper(board.D17,board.D18,board.D10,board.D9)
+# step1 = rm.digitalStepper(board.D17,board.D18,board.D10,board.D9)
+step1 = rm.digitalStepper(board.D27,board.D21,board.D13,board.D26)
 
 def home():
-    rs1.release()
+    step1.release()
     s4.angle = 0
     s2.angle = 0
     s5.angle = 0
