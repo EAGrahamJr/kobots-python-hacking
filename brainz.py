@@ -20,7 +20,7 @@ step1 = rm.RotoStepper(crickit.drive_stepper_motor, step_size=stepper.INTERLEAVE
 step1.speed = .01
 step1.release()
 
-step2 = rm.RotoStepper(crickit.stepper_motor)     # ONCE = 400
+step2 = rm.RotoStepper(crickit.stepper_motor, step_size=stepper.INTERLEAVE) # ONCE = 4096
 step2.release()
 
 # NeoPixel strand
