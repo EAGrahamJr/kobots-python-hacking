@@ -17,10 +17,11 @@ s4 = rs.mg90s(rs.crickit(4))
 
 # steppers
 step1 = rm.RotoStepper(crickit.drive_stepper_motor, step_size=stepper.INTERLEAVE) # ONCE = 4096
-step1.speed = .01
+step1.speed = .005
 step1.release()
 
 step2 = rm.RotoStepper(crickit.stepper_motor, step_size=stepper.INTERLEAVE) # ONCE = 4096
+step2.speed = .005
 step2.release()
 
 # NeoPixel strand
