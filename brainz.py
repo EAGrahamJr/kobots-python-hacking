@@ -1,6 +1,4 @@
-from edlib import colors as c
-from edlib import rotoservo as rs
-from edlib import rotomotor as rm
+from edlib import colors as c,rotoservo as rs,rotomotor as rm,seesaw_util as su
 from adafruit_crickit import crickit
 from adafruit_seesaw.neopixel import NeoPixel
 import board
@@ -10,10 +8,10 @@ from adafruit_motor import stepper
 i2c = board.I2C()
 
 # servos
-s1 = rs.mg90s(rs.crickit(1))
-s2 = rs.sg90(rs.crickit(2))
-s3 = rs.mg90s(rs.crickit(3))
-s4 = rs.mg90s(rs.crickit(4))
+s1 = rs.mg90s(crickit.servo_1)
+s2 = rs.sg90(crickit.servo_2)
+s3 = rs.mg90s(crickit.servo_3)
+s4 = rs.mg90s(crickit.servo_4)
 
 # steppers
 step1 = rm.RotoStepper(crickit.drive_stepper_motor, step_size=stepper.INTERLEAVE) # ONCE = 4096
@@ -25,14 +23,14 @@ step2.speed = .005
 step2.release()
 
 # NeoPixel strand
-# crickit.init_neopixel(8, brightness=.1)
-# strand = crickit.neopixel
 strand = NeoPixel(crickit.seesaw, 20, 8)
 strand.fill(c.BLACK)
-# status = crickit.onboard_pixel
-#status = NeoPixel(crickit.seesaw, 27, 1)
 
+# proximity sensor
 sensor = adafruit_vcnl4040.VCNL4040(i2c)
+
+# digital input - limit switch on thermometer
+t_switch = su.Button(crickit.SIGNAL1, crickit.seesaw)
 
 def home():
     step1.release()

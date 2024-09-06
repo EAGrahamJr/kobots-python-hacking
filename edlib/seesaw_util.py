@@ -4,9 +4,10 @@ class Button:
     def __init__(self,signal:int,see_saw:Seesaw):
         self._signal = signal
         self._ss = see_saw
-        self._ss.digital_write(signal, self._ss.INPUT_PULLUP)
+        self._ss.pin_mode(signal, self._ss.INPUT_PULLUP)
 
-    def read(self)->None:
+    @property
+    def value(self)->bool:
         return not self._ss.digital_read(self._signal)
 
 class LED:
