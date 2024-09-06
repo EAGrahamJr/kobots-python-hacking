@@ -6,7 +6,6 @@ from "zooming" to an agle with.
 """
 
 from time import sleep
-import board
 from adafruit_motor.servo import Servo
 
 def move_servo(servo:Servo, angle: float, rate: float = 0.025):
@@ -30,52 +29,6 @@ def move_servo(servo:Servo, angle: float, rate: float = 0.025):
             sleep(rate)
 
         servo.angle = angle
-
-def gpio(pin = board.D18) -> Servo:
-    """Create a servo for a GPIO pin
-
-    Args:
-        pin (Pin, optional): which pin to use. Defaults to board.D18.
-
-    Returns:
-        Servo: an Adafruit "Servo" for the pin
-    """
-    import pwmio
-    pwm = pwmio.PWMOut(pin, duty_cycle=2 ** 15, frequency=50)
-    return Servo(pwm, actuation_range=180)
-
-def hat(channel:int = 0) -> Servo:
-    """Create a servo for a specific channel on a servo driver board.
-
-    Args:
-        channel (int, optional): channel to use. Defaults to 0.
-
-    Returns:
-        Servo: an Adafruit "Servo" for the channel
-    """
-    from adafruit_pca9685 import PCA9685
-    pca = PCA9685(board.I2C())
-    pca.frequency = 50
-    pwm = pca.channels[channel]
-    return Servo(pwm, actuation_range=180)
-
-def crickit(index:int = 1) -> Servo:
-    """Create a servo for the specific CRICKIT Hat output.
-
-    Args:
-        index (int, optional): one of the 4 servo channels (1-4). Defaults to 1.
-
-    Returns:
-        Servo: an Adafruit "Servo" for the channel
-    """
-    from adafruit_crickit import crickit
-    if index == 1:
-        return crickit.servo_1
-    if index == 2:
-        return crickit.servo_2
-    if index == 3:
-        return crickit.servo_3
-    return crickit.servo_4
 
 class RotoServo:
     """
