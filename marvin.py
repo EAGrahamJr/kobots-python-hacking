@@ -1,4 +1,4 @@
-from edlib import rotoservo as rs,rotomotor as rm,gpio as jeep
+from edlib import rotoservo as rs,rotomotor as rm,gpio_stuff as jeep
 import board
 import adafruit_vl6180x
 from adafruit_motor.servo import Servo
@@ -18,7 +18,7 @@ s4 = rs.mg90s(hat(3)) # grab
 s5 = rs.mg90s(hat(4))
 
 step1 = rm.digitalStepper(board.D27,board.D21,board.D13,board.D26) # ONCE = 4096
-step1.speed = .005
+step1.speed = .001
 step1.release()
 
 nood = jeep.LED(board.D4)
