@@ -8,6 +8,7 @@ class RotoStepper:
         self._motor = motor
         self._speed = delay
         self._style = step_size
+        self._ratio = 1.0
 
     @property
     def speed(self)->float:
@@ -27,6 +28,13 @@ class RotoStepper:
         """
         self._speed = howFast
 
+    @property
+    def gear_ratio(self):
+        return self._ratio
+    @gear_ratio.setter
+    def gear_ratio(self, f:float):
+        self._ratio = f
+
     def forward(self,steps:int):
         self.__run(steps)
 
@@ -37,7 +45,8 @@ class RotoStepper:
         self._motor.release()
 
     def __run(self,steps:int, dir:int = stepper.FORWARD):
-        for i in range(1,steps):
+        actual = round(steps * self._ratio)
+        for i in range(1,actual):
             self._motor.onestep(direction=dir, style=self._style)
             sleep(self._speed)
         self._motor.release()
