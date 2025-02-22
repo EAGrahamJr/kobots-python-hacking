@@ -3,6 +3,7 @@ from adafruit_crickit import crickit
 from adafruit_seesaw.neopixel import NeoPixel
 import board
 import adafruit_vcnl4040
+import adafruit_vl6180x
 from adafruit_motor import stepper
 
 i2c = board.I2C()
@@ -27,7 +28,9 @@ strand = NeoPixel(crickit.seesaw, 20, 8)
 strand.fill(c.BLACK)
 
 # proximity sensor
-sensor = adafruit_vcnl4040.VCNL4040(i2c)
+prox = adafruit_vcnl4040.VCNL4040(i2c)
+# tof sensor
+toffle = adafruit_vl6180x.VL6180X(i2c)
 
 # digital input - limit switch on thermometer
 t_switch = su.Button(crickit.SIGNAL1, crickit.seesaw)
