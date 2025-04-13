@@ -23,7 +23,7 @@ step1.release()
 
 nood = jeep.LED(board.D4)
 # switch = jeep.Button(board.D23)
-sensor = adafruit_vl6180x.VL6180X(board.I2C())
+# sensor = adafruit_vl6180x.VL6180X(board.I2C())
 
 def home():
     nood.brightness = 75
@@ -31,9 +31,16 @@ def home():
     s4.angle = 0
     s3.angle = 0
 
-    if s2.angle != 0:
-        s2.angle = 30
+    #if s2.angle != 0:
+    #    s2.angle = 30
     s1.angle = 0
     s2.angle = 0
 
     nood.brightness = 0
+
+def status():
+    print(f"s1 {s1.angle}")
+    print(f"s2 {s2.angle}")
+    print(f"s3 {s3.angle}")
+    print(f"s4 {s4.angle}")
+
