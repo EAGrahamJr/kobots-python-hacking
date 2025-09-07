@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from pwmio import PWMOut
 import time
 from adafruit_crickit import crickit
 from adafruit_motor import stepper
@@ -41,7 +42,7 @@ def runIt(motor:StepperMotor, delay:float = 0.02, steps:int = 200):
     #     motor.onestep(direction=stepper.BACKWARD, style=stepper.MICROSTEP)
     #     time.sleep(delay)
 
-crickit.seesaw.edbug = False
+# crickit.seesaw.edbug = False
 
 motor = None
 delay = None
@@ -50,7 +51,7 @@ ONCE = 1
 picked = int(input("Which stepper (1=drive, 2=stepper, 0=exit: "))
 
 if picked == 0:
-    exit
+    exit(0)
 
 step_style = stepper.SINGLE
 

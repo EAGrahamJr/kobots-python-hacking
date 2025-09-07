@@ -27,13 +27,19 @@ step2.release()
 strand = NeoPixel(crickit.seesaw, 20, 8)
 strand.fill(c.BLACK)
 
+on_board = crickit.onboard_pixel
+# on_board.fill(c.BLACK)
+
+# digital port - configured for "out"
+nood_port = su.LED(crickit.SIGNAL1,crickit.seesaw)
+
 # proximity sensor
-prox = adafruit_vcnl4040.VCNL4040(i2c)
+# prox = adafruit_vcnl4040.VCNL4040(i2c)
 # tof sensor
-toffle = adafruit_vl6180x.VL6180X(i2c)
+# toffle = adafruit_vl6180x.VL6180X(i2c)
 
 # digital input - limit switch on thermometer
-t_switch = su.Button(crickit.SIGNAL1, crickit.seesaw)
+# t_switch = su.Button(crickit.SIGNAL1, crickit.seesaw)
 
 def home():
     step1.release()
