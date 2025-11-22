@@ -1,22 +1,31 @@
 import asyncio
 from adafruit_crickit import crickit
 
-from easefunc import ease_value, ease_in_out_sine, ease_out_quad
+from pybot_base import ServoMover, set_mg90s
 
 # Setup servo
-servo = crickit.servo_1
+servo1 = set_mg90s(crickit.servo_1)
+servo2 = set_mg90s(crickit.servo_3)
 
-servo.set_pulse_width_range(400,2600)
-servo.actuation_range = 200
-
-# Async wrapper for servo update
-def set_servo_angle(angle):
-    servo.angle = angle
+sm1 = ServoMover(servo1)
+sm2 = ServoMover(servo2)
 
 # Run easing loop
-async def sweep_servo():
-    await ease_value(0, 90, duration=2.0, update_fn=set_servo_angle, easing_fn=ease_in_out_sine, steps=100)
-    await ease_value(90, 0, duration=2.0, update_fn=set_servo_angle, easing_fn=ease_out_quad, steps=100)
+async def sweep_servo1():
+    await sm1.smooth(90, 4.0)
+    await asyncio.sleep(10.0)
+    await sm1.soft_landing(0, 4.0)
+
+async def sweep_servo2():
+    await asyncio.sleep(4.5)
+    await sm2.soft_start(180, 2.0)
+    await sm2.soft_landing(0, 2.0)
 
 # Start event loop
-asyncio.run(sweep_servo())
+async def run_it():
+    # starts running tasks immediately
+    tasks = [asyncio.create_task(sweep_servo1()), asyncio.create_task(sweep_servo2())]
+    # can do other stuff
+    await asyncio.gather(*tasks)
+
+asyncio.run(run_it())

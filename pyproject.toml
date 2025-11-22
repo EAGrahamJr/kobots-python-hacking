@@ -1,0 +1,27 @@
+[project]
+name = "kobots-python-hacking"
+version = "0.1.0"
+description = "Python scripts for exploring robotics with Adafruit hardware"
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "adafruit-blinka",
+    "adafruit-circuitpython-crickit",
+    "adafruit-circuitpython-motor",
+    "adafruit-circuitpython-is31fl3731",
+    "adafruit-circuitpython-seesaw",
+    "adafruit-circuitpython-vcnl4040",
+    "adafruit-circuitpython-vl6180x",
+    "adafruit-circuitpython-ht16k33",
+    "adafruit-circuitpython-pca9685",
+    "adafruit-circuitpython-ssd1306",
+    "adafruit-circuitpython-displayio-sh1106",
+    "adafruit-circuitpython-display-text",
+    "adafruit-circuitpython-neopixel",
+]
+
+[dependency-groups]
+dev = []
+
+[tool.uv]
+package = false
