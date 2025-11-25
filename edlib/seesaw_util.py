@@ -1,17 +1,19 @@
 from adafruit_seesaw.seesaw import Seesaw
 
+
 class Button:
-    def __init__(self,signal:int,see_saw:Seesaw):
+    def __init__(self, signal: int, see_saw: Seesaw):
         self._signal = signal
         self._ss = see_saw
         self._ss.pin_mode(signal, self._ss.INPUT_PULLUP)
 
     @property
-    def value(self)->bool:
+    def value(self) -> bool:
         return not self._ss.digital_read(self._signal)
 
+
 class LED:
-    def __init__(self,signal:int,see_saw:Seesaw):
+    def __init__(self, signal: int, see_saw: Seesaw):
         self._signal = signal
         self._ss = see_saw
         self._ss.digital_write(signal, self._ss.OUTPUT)

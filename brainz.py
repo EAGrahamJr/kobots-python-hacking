@@ -1,10 +1,12 @@
-from edlib import colors as c,rotoservo as rs,rotomotor as rm,seesaw_util as su
+from edlib import colors as c, rotoservo as rs, rotomotor as rm, seesaw_util as su
 from adafruit_crickit import crickit
 from adafruit_seesaw.neopixel import NeoPixel
 import board
-import adafruit_vcnl4040
-import adafruit_vl6180x
+
+# import adafruit_vcnl4040
+# import adafruit_vl6180x
 from adafruit_motor import stepper
+from time import sleep
 
 i2c = board.I2C()
 
@@ -15,23 +17,29 @@ s3 = rs.mg90s(crickit.servo_3)
 s4 = rs.mg90s(crickit.servo_4)
 
 # steppers
-step1 = rm.RotoStepper(crickit.drive_stepper_motor, step_size=stepper.INTERLEAVE) # ONCE = 4096
-step1.speed = .005
+step1 = rm.RotoStepper(
+    crickit.drive_stepper_motor, step_size=stepper.INTERLEAVE
+)  # ONCE = 4096
+step1.speed = 0.005
 step1.release()
 
-step2 = rm.RotoStepper(crickit.stepper_motor, step_size=stepper.INTERLEAVE) # ONCE = 4096
-step2.speed = .005
+step2 = rm.RotoStepper(
+    crickit.stepper_motor, step_size=stepper.INTERLEAVE
+)  # ONCE = 4096
+step2.speed = 0.005
 step2.release()
 
 # NeoPixel strand
 strand = NeoPixel(crickit.seesaw, 20, 8)
 strand.fill(c.BLACK)
 
+sleep(0.1)
 on_board = crickit.onboard_pixel
-# on_board.fill(c.BLACK)
+on_board.fill(c.BLACK)
+sleep(0.1)
 
 # digital port - configured for "out"
-nood_port = su.LED(crickit.SIGNAL1,crickit.seesaw)
+# nood_port = su.LED(crickit.SIGNAL1,crickit.seesaw)
 
 # proximity sensor
 # prox = adafruit_vcnl4040.VCNL4040(i2c)
@@ -40,6 +48,7 @@ nood_port = su.LED(crickit.SIGNAL1,crickit.seesaw)
 
 # digital input - limit switch on thermometer
 # t_switch = su.Button(crickit.SIGNAL1, crickit.seesaw)
+
 
 def home():
     step1.release()

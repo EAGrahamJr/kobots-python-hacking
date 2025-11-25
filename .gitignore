@@ -9,3 +9,4 @@ __*
 temp
 */edlib
 .python-version
+.ruff*

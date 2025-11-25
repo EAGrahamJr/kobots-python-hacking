@@ -1,12 +1,14 @@
 import board
 
+
 def board_i2c():
     try:
         i2c = board.I2C()  # uses board.SCL and board.SDA
         print("Using I2C")
     except Exception:
         try:
-            i2c = board.STEMMA_I2C()  # For using the built-in STEMMA QT connector on a microcontroller
+            # For using the built-in STEMMA QT connector on a microcontroller
+            i2c = board.STEMMA_I2C()
             print("Using STEMMA")
         except Exception:
             print("Unable to locate I2C interface - is anything connected?")

@@ -3,8 +3,10 @@ import pwmio
 import digitalio
 from adafruit_motor.servo import Servo
 
+
 class LED:
-    """Dimmable LED """
+    """Dimmable LED"""
+
     def __init__(self, pin) -> None:
         """Create the GPIO LED using PWM
 
@@ -12,7 +14,8 @@ class LED:
             pin (Pin): which GPIO pin
         """
         self._out = pwmio.PWMOut(pin)
-        self._out.enabled = True
+        # TODO hm
+        # self._out.enabled = True
         self._brightness = 0
 
     @property
@@ -26,8 +29,10 @@ class LED:
         self._brightness = b
         self._out.duty_cycle = int((b / 100.0) * 65535)
 
+
 class Button:
     """Manages a digital pin as a "button" """
+
     def __init__(self, pin) -> None:
         """Create the button
 
@@ -43,12 +48,14 @@ class Button:
     def value(self) -> bool:
         return not self._in.value
 
-    @property
-    def pressed(self) -> bool:
-        if self.value and not self._pressed:
-            self._pressed = True
-        elif not self.value:
-            self._pressed = False
+    # TODO huh?
+    # @property
+    # def pressed(self) -> bool:
+    #     if self.value and not self._pressed:
+    #         self._pressed = True
+    #     elif not self.value:
+    #         self._pressed = False
+
 
 def gpio_servo(pin=board.D18) -> Servo:
     """Create a servo for a GPIO pin
@@ -61,5 +68,6 @@ def gpio_servo(pin=board.D18) -> Servo:
         Servo: an Adafruit "Servo" for the pin
     """
     import pwmio
-    pwm = pwmio.PWMOut(pin, duty_cycle=2 ** 15, frequency=50)
+
+    pwm = pwmio.PWMOut(pin, duty_cycle=2**15, frequency=50)
     return Servo(pwm, actuation_range=180)
