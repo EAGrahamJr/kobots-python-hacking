@@ -110,3 +110,19 @@ def mg90s(servo: Servo) -> RotoServo:
     servo.set_pulse_width_range(400, 2600)
     servo.actuation_range = 200
     return RotoServo(servo)
+
+
+def mg996r(servo: Servo) -> RotoServo:
+    """Wraps a servo in a "speed-controlled" class.
+
+    Also sets the servo trim to appropriate values for an MG996R.
+    Note that this may result in maximum angles > 180.
+
+    Args:
+        servo (Servo): the servo to wrap
+    Returns:
+        RotoServo: speed-controlled, "stepping" servo
+    """
+    servo.set_pulse_width_range(500, 2500)
+    servo.actuation_range = 190
+    return RotoServo(servo)

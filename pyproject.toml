@@ -19,11 +19,12 @@ dependencies = [
     "adafruit-circuitpython-display-text",
     "adafruit-circuitpython-neopixel",
     "rpi-gpio>=0.7.1",
-    "ruff>=0.14.6",
 ]
 
 [dependency-groups]
-dev = []
+dev = [
+    "ruff>=0.14.6",
+]
 
 [tool.uv]
 package = false

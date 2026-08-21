@@ -1,25 +1,28 @@
-from abc import ABC, abstractmethod
-import asyncio
-from typing import Callable
+from adafruit_motor.stepper import StepperMotor
+from adafruit_motor import stepper
 
-from .easefunc import (
-    ease_in_out_sine,
-    ease_in_quad,
-    ease_out_bounce,
-    ease_out_quad,
-    linear,
-)
+from .pybot_base import BaseMover
+
+# TODO NOT READY YET
 
 
-class BaseMover(ABC):
+class StepperMover(BaseMover):
+    def __init__(
+        self,
+        motor: StepperMotor,
+        steps_per_rotation: int = 2048,
+        delay: float = 0.025,
+        step_size: int = stepper.SINGLE,
+    ) -> None:
+        self._motor = motor
+        self._speed = delay
+        self._style = step_size
+        self._current_angle = 0
+        self._ratio = 1.0
+
     @property
-    @abstractmethod
     def angle(self) -> float | None:
-        pass
-
-    @abstractmethod
-    def _apply_change(self, value: float) -> None:
-        pass
+        return self._current_angle
 
     async def soft_landing(self, value: int | float, duration: float) -> Task[None]:
         """
@@ -57,30 +60,5 @@ class BaseMover(ABC):
         """
         return asyncio.create_task(self.move(value, duration, ease_out_bounce))
 
-    async def move(
-        self,
-        value: int | float,
-        duration: float,
-        easing_fn: Callable[[float], float] = linear,
-    ):
-        """
-        Move the device to mumble angle.
-
-        :param value: where to
-        :param duration: how long (seconds)
-        :param easing_fn: how to get there; default is linear (e.g. no acceleration)
-        """
-        start = self.angle if self.angle is not None else 0
-        diff = value - start
-        steps = abs(int(diff))
-
-        print(f"Moving to {value} from {start} with {steps} steps")
-        if not steps:
-            return
-
-        for i in range(steps + 1):
-            t = i / steps
-            eased_t = easing_fn(t)
-            value = start + diff * eased_t
-            self._apply_change(value)
-            await asyncio.sleep(duration / steps)
+    async def move():
+        pass

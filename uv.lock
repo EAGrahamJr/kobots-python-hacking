@@ -362,6 +362,10 @@ dependencies = [
     { name = "adafruit-circuitpython-vcnl4040" },
     { name = "adafruit-circuitpython-vl6180x" },
     { name = "rpi-gpio" },
+]
+
+[package.dev-dependencies]
+dev = [
     { name = "ruff" },
 ]
 
@@ -381,11 +385,10 @@ requires-dist = [
     { name = "adafruit-circuitpython-vcnl4040" },
     { name = "adafruit-circuitpython-vl6180x" },
     { name = "rpi-gpio", specifier = ">=0.7.1" },
-    { name = "ruff", specifier = ">=0.14.6" },
 ]
 
 [package.metadata.requires-dev]
-dev = []
+dev = [{ name = "ruff", specifier = ">=0.14.6" }]
 
 [[package]]
 name = "pyftdi"
