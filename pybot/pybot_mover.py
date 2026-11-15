@@ -12,16 +12,26 @@ from .easefunc import (
 
 
 class BaseMover(ABC):
+    _location = None
+
     @property
-    @abstractmethod
-    def angle(self) -> float | None:
-        pass
+    def location(self) -> float | None:
+        return self._location
 
     @abstractmethod
     def _apply_change(self, value: float) -> None:
         pass
 
-    async def soft_landing(self, value: int | float, duration: float) -> Task[None]:
+    def linear(self, value: int | float, duration: float) -> asyncio.Task[None]:
+        """
+        Just go.
+
+        :param value: where to
+        :param duration: how long (seconds)
+        """
+        return asyncio.create_task(self.move(value, duration, linear))
+
+    def soft_landing(self, value: int | float, duration: float) -> asyncio.Task[None]:
         """
         Gently stop
 
@@ -30,7 +40,7 @@ class BaseMover(ABC):
         """
         return asyncio.create_task(self.move(value, duration, ease_out_quad))
 
-    async def soft_start(self, value: int | float, duration: float) -> Task[None]:
+    def soft_start(self, value: int | float, duration: float) -> asyncio.Task[None]:
         """
         Slow start
 
@@ -39,7 +49,7 @@ class BaseMover(ABC):
         """
         return asyncio.create_task(self.move(value, duration, ease_in_quad))
 
-    def smooth(self, value: int | float, duration: float) -> Task[None]:
+    def smooth(self, value: int | float, duration: float) -> asyncio.Task[None]:
         """
         Ease in and out smoothly
 
@@ -48,7 +58,7 @@ class BaseMover(ABC):
         """
         return asyncio.create_task(self.move(value, duration, ease_in_out_sine))
 
-    def bounce(self, value: int | float, duration: float) -> Task[None]:
+    def bounce(self, value: int | float, duration: float) -> asyncio.Task[None]:
         """
         Bouncing ball (best for large moves)
 
@@ -64,13 +74,15 @@ class BaseMover(ABC):
         easing_fn: Callable[[float], float] = linear,
     ):
         """
-        Move the device to mumble angle.
+        Move the device to the requested angle/location.
 
-        :param value: where to
+        Note that the target is **NOT** an async function.
+
+        :param requested: where to
         :param duration: how long (seconds)
         :param easing_fn: how to get there; default is linear (e.g. no acceleration)
         """
-        start = self.angle if self.angle is not None else 0
+        start = self.location if self.location is not None else 0
         diff = requested - start
         steps = abs(int(diff))
 
@@ -83,3 +95,6 @@ class BaseMover(ABC):
             value = start + diff * eased_t
             self._apply_change(value)
             await asyncio.sleep(duration / steps)
+
+        # assume it made the trip
+        self._location = requested

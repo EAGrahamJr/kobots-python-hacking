@@ -9,3 +9,4 @@ temp
 */edlib
 .python-version
 .ruff*
+.idea
