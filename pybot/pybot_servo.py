@@ -1,5 +1,5 @@
 from adafruit_motor.servo import Servo
-from .pybot_base import BaseMover
+from .pybot_mover import BaseMover
 
 
 class ServoMover(BaseMover):

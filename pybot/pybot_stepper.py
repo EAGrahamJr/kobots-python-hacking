@@ -1,9 +1,7 @@
 from adafruit_motor.stepper import StepperMotor
 from adafruit_motor import stepper
 
-from .pybot_base import BaseMover
-
-# TODO NOT READY YET
+from .pybot_mover import BaseMover
 
 
 class StepperMover(BaseMover):
@@ -11,9 +9,20 @@ class StepperMover(BaseMover):
         self,
         motor: StepperMotor,
         steps_per_rotation: int = 2048,
-        delay: float = 0.025,
+        delay: float = 0.003,
         step_size: int = stepper.SINGLE,
     ) -> None:
+        """
+        Async wrapper for a stepper.
+
+        Defaults to the "standard" YP settings of 2048 steps per rotation in single step mode.
+        Assumes the "location" of the stepper is 0 at initialization.
+
+        :param motor: the motor
+        :param steps_per_rotation: how far it goes (default 2048)
+        :param delay: minimum time (seconds) between pulses; useful for "slow" interfaces (default .003 seconds)
+        :param style: how to make the motor step (default SINGLE)
+        """
         self._motor = motor
         self._speed = delay
         self._style = step_size
@@ -24,41 +33,20 @@ class StepperMover(BaseMover):
     def angle(self) -> float | None:
         return self._current_angle
 
-    async def soft_landing(self, value: int | float, duration: float) -> Task[None]:
-        """
-        Gently stop
+    async def forward(steps:int, duration: float, easing_fn: Callable[[float], float] = linear):
+        return asyncio.create_task(self.move(value, duration, easing_fn))
 
-        :param value: where to
-        :param duration: how long (seconds)
-        """
-        return asyncio.create_task(self.move(value, duration, ease_out_quad))
+    def _apply_change(self, value: float) -> None:
+        angle = abs(round(value * self._ratio))
+        if not angle:
+            return
 
-    async def soft_start(self, value: int | float, duration: float) -> Task[None]:
-        """
-        Slow start
+        # TODO angluar change to steps
+        steps = angle
 
-        :param value: where to
-        :param duration: how long (seconds)
-        """
-        return asyncio.create_task(self.move(value, duration, ease_in_quad))
+        dir = stepper.BACKWARD if value < 0 else stepper.FORWARD
 
-    def smooth(self, value: int | float, duration: float) -> Task[None]:
-        """
-        Ease in and out smoothly
-
-        :param value: where to
-        :param duration: how long (seconds)
-        """
-        return asyncio.create_task(self.move(value, duration, ease_in_out_sine))
-
-    def bounce(self, value: int | float, duration: float) -> Task[None]:
-        """
-        Bouncing ball (best for large moves)
-
-        :param value: where to
-        :param duration: how long (seconds)
-        """
-        return asyncio.create_task(self.move(value, duration, ease_out_bounce))
-
-    async def move():
-        pass
+        for i in range(1, steps):
+            self._motor.onestep(direction=dir, style=self._style)
+            sleep(self._speed)
+        self._motor.release()

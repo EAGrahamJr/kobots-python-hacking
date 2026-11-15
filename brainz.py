@@ -20,14 +20,14 @@ def np_init():
 i2c = board.I2C()
 
 # servos
-s1 = rs.mg996r(crickit.servo_1)
-s2 = rs.mg996r(crickit.servo_2)
+s1 = rs.mg90s(crickit.servo_1)
+s2 = rs.mg90s(crickit.servo_2)
 s3 = rs.mg90s(crickit.servo_3)
-s4 = rs.mg90s(crickit.servo_4)
+s4 = rs.sg90(crickit.servo_4)
 
 # steppers
 step1 = rm.RotoStepper(
-    crickit.drive_stepper_motor  # , step_size=stepper.INTERLEAVE
+    crickit.drive_stepper_motor, step_size=stepper.INTERLEAVE
 )  # ONCE = 4096
 step1.speed = 0.005
 step1.release()
@@ -35,7 +35,7 @@ step1.release()
 step2 = rm.RotoStepper(
     crickit.stepper_motor  # , step_size=stepper.INTERLEAVE
 )  # ONCE = 4096
-step2.speed = 0.002
+step2.speed = 0.008
 step2.release()
 
 crickit.onboard_pixel.fill(c.BLACK)
@@ -48,7 +48,7 @@ np_init()
 # proximity sensor
 # prox = adafruit_vcnl4040.VCNL4040(i2c)
 # tof sensor
-toffle = adafruit_vl6180x.VL6180X(i2c)
+# toffle = adafruit_vl6180x.VL6180X(i2c)
 
 # digital input - limit switch on thermometer
 # t_switch = su.Button(crickit.SIGNAL1, crickit.seesaw)

@@ -1,5 +1,6 @@
 import asyncio
 import math
+
 from typing import Callable
 
 
@@ -42,9 +43,18 @@ async def ease_value(
     easing_fn: Callable[[float], float] = linear,
     steps: int = 50,
 ):
+    diff = (end - start)
+    duration_per_step = duration / steps
+
+    if int(diff) == 0:
+        # going nowhere this time around, fake a single step
+        # and return
+        await asyncio.sleep(duration_per_step)
+        return
+
     for i in range(steps + 1):
         t = i / steps
         eased_t = easing_fn(t)
-        value = start + (end - start) * eased_t
+        value = start + diff * eased_t
         update_fn(value)
-        await asyncio.sleep(duration / steps)
+        await asyncio.sleep(duration_per_step)

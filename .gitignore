@@ -5,7 +5,6 @@ nohup*
 **/edstuff.py*
 venv
 .venv
-__*
 temp
 */edlib
 .python-version

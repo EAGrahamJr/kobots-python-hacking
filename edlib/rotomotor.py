@@ -1,6 +1,6 @@
 from adafruit_motor.stepper import StepperMotor
 from adafruit_motor import stepper
-from time import sleep
+from time import sleep,monotonic
 from digitalio import DigitalInOut, Direction
 
 
@@ -50,6 +50,7 @@ class RotoStepper:
 
     def __run(self, steps: int, dir: int = stepper.FORWARD):
         actual = round(steps * self._ratio)
+#        monotic()
         for i in range(1, actual):
             self._motor.onestep(direction=dir, style=self._style)
             sleep(self._speed)
