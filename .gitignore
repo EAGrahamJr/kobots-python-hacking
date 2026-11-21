@@ -1,6 +1,9 @@
 *.code*
 __*
 .vs*
+!.vscode/
+.vscode/*
+!.vscode/settings.json
 nohup*
 **/edstuff.py*
 venv

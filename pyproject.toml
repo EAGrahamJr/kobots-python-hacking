@@ -19,6 +19,9 @@ dependencies = [
     "adafruit-circuitpython-display-text",
     "adafruit-circuitpython-neopixel",
     "rpi-gpio>=0.7.1",
+    "gpiod>=2.2.2,<3",
+    "adafruit-blinka-raspberry-pi-pwm>=1.0.2",
+    "rpi-ws281x>=4.0.0",
 ]
 
 [dependency-groups]

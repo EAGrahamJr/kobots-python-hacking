@@ -1,16 +1,16 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 import time
 import board
 from rainbowio import colorwheel
 from adafruit_seesaw import seesaw, neopixel
-from edlib.i2c_util import _BLUE, _CYAN, _GREEN, _PURPLE, _RED, _YELLOW
+from edlib.colors import BLUE, CYAN, GREEN, PURPLE, RED, YELLOW
 
 # This little gem was wiring together a WS2818 LED "ring"
 # with an Adafruit Neopixel "strip" and using the I2C breakout board
 
 i2c = board.I2C()
-num_pixels = 38 # Number of pixels driven from the seesaw
+num_pixels = 24 # Number of pixels driven from the seesaw
 # The following line sets up a NeoPixel strip on Seesaw pin 15 for I2C breakout
 
 print("Init NeoPixel")
@@ -38,23 +38,23 @@ try:
     pixels.show()
     while True:
         print("fill")
-        pixels.fill(_RED)
+        pixels.fill(RED)
         pixels.show()
         # Increase or decrease to change the speed of the solid color change.
         time.sleep(.5)
-        pixels.fill(_GREEN)
+        pixels.fill(GREEN)
         pixels.show()
         time.sleep(.5)
-        pixels.fill(_BLUE)
+        pixels.fill(BLUE)
         pixels.show()
         time.sleep(.5)
         print("chase")
-        color_chase(_RED, CHASE) # Increase the number to slow down the color chase
-        color_chase(_YELLOW, CHASE)
-        color_chase(_GREEN, CHASE)
-        color_chase(_CYAN, CHASE)
-        color_chase(_BLUE, CHASE)
-        color_chase(_PURPLE, CHASE)
+        color_chase(RED, CHASE) # Increase the number to slow down the color chase
+        color_chase(YELLOW, CHASE)
+        color_chase(GREEN, CHASE)
+        color_chase(CYAN, CHASE)
+        color_chase(BLUE, CHASE)
+        color_chase(PURPLE, CHASE)
         print("rainbow")
         rainbow_cycle(0) # Increase the number to slow down the rainbo
 except:

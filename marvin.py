@@ -1,50 +1,40 @@
-from edlib import rotoservo as rs, rotomotor as rm, gpio_stuff as jeep
+#!/usr/bin/env python3
+
 import board
-import adafruit_vl6180x
-from adafruit_motor.servo import Servo
+from edlib.colors import NeoPixelEffects, RED
+from adafruit_seesaw import seesaw, neopixel
 
-from adafruit_pca9685 import PCA9685
+# def moving_rainbow(strand:neopixel.NeoPixel, num_pixels:int, speed:int=10):
+#     """Use list comprehension to create a moving rainbow effect.
 
-pca = PCA9685(board.I2C())
-pca.frequency = 50
+#     Requires auto-update.
+#     Args:
+#         strand: The NeoPixel strand to animate.
+#         num_pixels: The number of pixels in the strand.
+#         speed: The speed of the moving rainbow effect (lower is faster).
+#     """
+#     while True:
+#         t = time.monotonic() * 1000 / speed
+#         strand[:] = [colorwheel( t + i*(255/num_pixels ) ) for i in range(num_pixels)]
 
+# start the rainbow cycle on the NeoPixel strand
+i2c = board.I2C()
+num_pixels = 35 # Number of pixels driven from the seesaw
 
-def hat(channel) -> Servo:
-    pwm = pca.channels[channel]
-    return Servo(pwm, actuation_range=180)
+print("Init NeoPixel")
+ss = seesaw.Seesaw(i2c, addr=0x60)
+pixels = neopixel.NeoPixel(ss, 15, num_pixels)
 
+effects = NeoPixelEffects()
 
-s1 = rs.mg90s(hat(0))  # a1
-s2 = rs.mg90s(hat(1))  # a2
-s3 = rs.mg90s(hat(2))  # twist
-s4 = rs.mg90s(hat(3))  # grab
-s5 = rs.mg90s(hat(4))
+try:
+    while True:
+        pixels.brightness = 0.02
+        # effects.rainbow_cycle(pixels, range(num_pixels))
+        # effects.moving_rainbow(pixels, num_pixels, speed=100)
+        effects.chase(pixels, num_pixels, RED)
 
-step1 = rm.digitalStepper(board.D27, board.D21, board.D13, board.D26)  # ONCE = 4096
-step1.speed = 0.001
-step1.release()
+except Exception:
+    pixels.fill((0,0,0))
+    pixels.show()
 
-nood = jeep.LED(board.D4)
-# switch = jeep.Button(board.D23)
-# sensor = adafruit_vl6180x.VL6180X(board.I2C())
-
-
-def home():
-    nood.brightness = 75
-    step1.release()
-    s4.angle = 0
-    s3.angle = 0
-
-    # if s2.angle != 0:
-    #    s2.angle = 30
-    s1.angle = 0
-    s2.angle = 0
-
-    nood.brightness = 0
-
-
-def status():
-    print(f"s1 {s1.angle}")
-    print(f"s2 {s2.angle}")
-    print(f"s3 {s3.angle}")
-    print(f"s4 {s4.angle}")

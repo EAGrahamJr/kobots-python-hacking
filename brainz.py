@@ -6,13 +6,15 @@ import board
 import adafruit_vl6180x
 from adafruit_motor import stepper
 from time import sleep
+from rainbowio import colorwheel
 
+NUM_PIXELS = 8
 
 def np_init():
     # NeoPixel strand - must be re-initialized after every
     # "on-board" call because the CRICKIT switches buffer
     # addresses and lengths
-    crickit.init_neopixel(16)
+    crickit.init_neopixel(NUM_PIXELS)
     crickit.neopixel.fill(c.BLACK)
     sleep(0.1)
 
@@ -53,12 +55,19 @@ np_init()
 # digital input - limit switch on thermometer
 # t_switch = su.Button(crickit.SIGNAL1, crickit.seesaw)
 
+def rainbow_cycle(wait=0):
+    for j in range(255):
+        for i in range(NUM_PIXELS):
+            rc_index = (i * 256 // NUM_PIXELS) + j
+            crickit.neopixel[i] = colorwheel(rc_index & 255)
+            sleep(wait)
+            crickit.neopixel.show()
 
-def reset():
-    s4.angle = 0
+# def reset():
+#     s4.angle = 0
 
-    while toffle.range >= 5:
-        step1.forward(5)
+#     while toffle.range >= 5:
+#         step1.forward(5)
 
 
 def home():
